@@ -1,0 +1,18 @@
+<?php
+
+$finder = PhpCsFixer\Finder::create()
+        ->exclude('vendor')
+        ->in(__DIR__);
+
+return PhpCsFixer\Config::create()
+        ->setRules([
+            '@PSR1' => true,
+            '@PSR2' => true,
+            'no_unused_imports' => true,
+            'ordered_imports' => true,
+            'single_quote' => true,
+            'whitespace_after_comma_in_array' => true,
+            'array_syntax' => ['syntax' => 'short'],
+            'no_whitespace_in_blank_line' => true,
+        ])
+        ->setFinder($finder);

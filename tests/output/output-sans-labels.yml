@@ -1,0 +1,12 @@
+version: '3.4'
+networks:
+  front: 'foo-front'
+  back: 'foo-back'
+services:
+  my-service:
+    ports:
+      - '80:80'
+    environment:
+      BAR: 'bar'
+      BAZ: 'baz'
+
