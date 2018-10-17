@@ -69,11 +69,17 @@ class GenerateTest extends TestCase
         ];
     }
 
-    public function testUsesEnvironmentFile()
+    public function testUsesSettingsFromIniFiles()
     {
         $this->commandTester->execute([
             'template' => __DIR__.'/input/template.yml',
-            '--env-file' => __DIR__.'/input/env.ini',
+            '--ini' => [
+                __DIR__.'/input/foo.ini',
+                __DIR__.'/input/bar.ini',
+            ],
+            '--env' => [
+                'BAZ=baz',
+            ],
         ]);
         $output = $this->commandTester->getDisplay();
         $expected = file_get_contents(__DIR__.'/output/output.yml');
@@ -111,17 +117,19 @@ class GenerateTest extends TestCase
     public function testThrowsExceptionIfNoInputProvided()
     {
         $this->commandTester->execute([]);
-        $output = $this->commandTester->getDisplay();
-        echo $output;
     }
 
     /**
-     * @expectedException InvalidArgumentException
+     * @expectedException RuntimeException
      */
     public function testThrowsExceptionIfIniFileNotFound()
     {
         $this->commandTester->execute([
-            '--env-file' => '/file/that/does/not/exist',
+            'template' => __DIR__.'/input/template.yml',
+            '--ini' => [
+                __DIR__.'/input/env.ini',
+                '/file/that/does/not/exist',
+            ],
         ]);
     }
 

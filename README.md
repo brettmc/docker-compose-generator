@@ -3,13 +3,13 @@ A tool for populating a docker-compose file from a template, using mustache-like
 
 # Overview
 If you need to maintain multiple, slightly-different, [docker-compose](https://docs.docker.com/compose) configurations
-which change per-environment, this cool can help.
+which change per-environment, this tool can help.
 
 ## Variable substitution
 Perform variable substitution across the template, based on environment variables.
 
 ## Define variables in numerous ways
-Accepts variables from an INI-style environment file, comment switches, or the current environment
+Accepts variables from INI-style environment files, command switches, or the current environment
 
 ## Remove keys you do not need
 Exclude keys from final output (eg if you use a labels-based router such as [traefik](https://traefik.io) in some environments, and
@@ -37,7 +37,7 @@ services:
 ```
 
 ```
-$ php bin/console.php generate -e FOO=foo -e BAR=bar --exclude ports < template.yml
+$ php bin/console.php generate -e FOO=foo -e BAR=bar --ini my.ini --exclude ports < template.yml
 version: '3.4'
 networks:
   front: null

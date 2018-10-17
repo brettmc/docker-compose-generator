@@ -22,9 +22,9 @@ class GenerateCommand extends Command
             ->setDescription('generate docker-compose config from YAML')
             ->setDefinition([
                 new InputArgument('template', InputArgument::OPTIONAL, 'template file'),
-                new InputOption('env', 'e', InputOption::VALUE_IS_ARRAY | InputOption::VALUE_OPTIONAL, 'env'),
-                new InputOption('env-file', null, InputOption::VALUE_OPTIONAL, 'environment file'),
-                new InputOption('exclude', null, InputOption::VALUE_IS_ARRAY | InputOption::VALUE_OPTIONAL, 'keys to be excluded from output'),
+                new InputOption('env', 'e', InputOption::VALUE_IS_ARRAY | InputOption::VALUE_OPTIONAL, 'env setting (FOO=bar)'),
+                new InputOption('ini', null, InputOption::VALUE_IS_ARRAY | InputOption::VALUE_OPTIONAL, 'ini file containing settings'),
+                new InputOption('exclude', null, InputOption::VALUE_IS_ARRAY | InputOption::VALUE_OPTIONAL, 'key to be excluded from output'),
             ]);
     }
 
@@ -36,9 +36,9 @@ class GenerateCommand extends Command
             list($k, $v) = explode('=', $pair);
             $env[$k] = $v;
         }
-        $envFile = $input->getOption('env-file');
-        if ($envFile) {
-            $loader = new EnvironmentLoader($envFile);
+        $iniFiles = $input->getOption('ini');
+        if ($iniFiles) {
+            $loader = new EnvironmentLoader($iniFiles);
             $env += $loader->load();
         }
         $templateFile = $input->getArgument('template');

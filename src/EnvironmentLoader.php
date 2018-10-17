@@ -3,18 +3,22 @@ namespace dcgen;
 
 class EnvironmentLoader
 {
-    private $filename;
+    private $filenames;
 
-    public function __construct(string $iniFile)
+    public function __construct(array $iniFiles)
     {
-        $this->filename = $iniFile;
-        if (!file_exists($this->filename)) {
-            throw new \InvalidArgumentException('File not found: '.$this->filename);
-        }
+        $this->filenames = $iniFiles;
     }
 
     public function load(): array
     {
-        return parse_ini_file($this->filename);
+        $settings = [];
+        foreach ($this->filenames as $filename) {
+            if (!file_exists($filename)) {
+                throw new \RuntimeException('File not found: '.$filename);
+            }
+            $settings += parse_ini_file($filename);
+        }
+        return $settings;
     }
 }
