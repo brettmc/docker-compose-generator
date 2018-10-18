@@ -30,6 +30,10 @@ class GenerateCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        //todo: can symfony/console do this
+        if ($input->getStream() === null) {
+            $input->setStream(STDIN);
+        }
         $excluded = $input->getOption('exclude');
         $env = [];
         foreach ($input->getOption('env') as $pair) {

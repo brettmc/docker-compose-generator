@@ -7,13 +7,12 @@ use Symfony\Component\Console\Tester\CommandTester;
 
 class GenerateTest extends TestCase
 {
-    private $command;
     private $commandTester;
 
     public function setup()
     {
-        $this->command = new GenerateCommand();
-        $this->commandTester = new CommandTester($this->command);
+        $command = new GenerateCommand();
+        $this->commandTester = new CommandTester($command);
     }
 
     public function tearDown()
@@ -135,13 +134,8 @@ class GenerateTest extends TestCase
 
     public function testReadsTemplateFromStdin()
     {
-        $this->markTestSkipped('todo, how to use stdin as a command input stream');
         $template = file_get_contents(__DIR__.'/input/template.yml');
-        //$this->commandTester->setInputs([$template]);
-        $x = fwrite(STDIN, $template);
-        $z = ftell(STDIN);
-        $y = fseek(STDIN, 1-$x, SEEK_END);
-        //$y = rewind(STDIN);
+        $this->commandTester->setInputs([$template]);
         $this->commandTester->execute([
             '--env' => [
                 'FOO=foo',
@@ -156,13 +150,18 @@ class GenerateTest extends TestCase
 
     public function testMissesAreWrittenToStdout()
     {
-        $this->commandTester->execute([
-            'template' => __DIR__.'/input/template.yml',
-            '--env' => [
-                'FOO=foo',
+        $this->commandTester->execute(
+            [
+                'template' => __DIR__.'/input/template.yml',
+                '--env' => [
+                    'FOO=foo',
+                ],
             ],
-        ]);
-        $output = $this->commandTester->getDisplay();
+            [
+                'capture_stderr_separately' => true,
+            ]
+        );
+        $output = $this->commandTester->getErrorOutput();
         $this->assertContains('WARNING: 2 keys were not defined: BAR, BAZ', $output);
     }
 }

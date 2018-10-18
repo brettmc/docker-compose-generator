@@ -24,7 +24,7 @@ class TemplateLoader
     }
 
     /**
-     * If $file is provided, read its contents. Otherwise, read from STDIN
+     * If $file is provided, read its contents. Otherwise, read from input stream
      *
      * @param string $file
      * @return string
@@ -32,13 +32,13 @@ class TemplateLoader
      */
     private function readFileOrStdin(Input $input, string $file = null): string
     {
+        $stream = $input->getStream() ?: STDIN;
         if ($file) {
             $contents = file_get_contents($file);
-        //} else if (is_resource($input->getStream()) && 0 === ftell($input->getStream())) {
-        } elseif (0 === ftell(STDIN)) {
+        } elseif (is_resource($stream) && 0 === ftell($stream)) {
             $contents = '';
-            while (!feof(STDIN)) {
-                $contents .= fread(STDIN, 1024);
+            while (!feof($stream)) {
+                $contents .= fread($stream, 1024);
             }
         } else {
             throw new \RuntimeException('Template not found in file or STDIN');
