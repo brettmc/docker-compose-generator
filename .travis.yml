@@ -3,7 +3,6 @@ language: php
 php:
   - 7.1
   - 7.2
-  - 7.3
 
 cache:
   directories:
@@ -13,5 +12,5 @@ install:
   - composer install --no-interaction
 
 script:
-  - ./vendor/bin/phpunit --coverage-text
   - composer check
+  - ./vendor/bin/phpunit --coverage-text

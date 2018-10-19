@@ -1,4 +1,6 @@
 # docker-compose generator
+[![Build Status](https://travis-ci.com/brettmc/docker-compose-generator.svg?branch=master)](https://travis-ci.com/brettmc/docker-compose-generator)
+
 A tool for populating a docker-compose file from a template, using mustache-like replacement.
 
 # Overview
