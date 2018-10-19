@@ -9,8 +9,11 @@ cache:
     - $HOME/.composer/cache
 
 install:
-  - composer install --no-interaction
+  - composer install --no-interaction --coverage-clover build/logs/clover.xml
 
 script:
   - composer check
   - ./vendor/bin/phpunit --coverage-text
+
+after_success:
+  - travis_retry vendor/bin/php-coveralls
