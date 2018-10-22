@@ -59,9 +59,9 @@ services:
 ## Run via docker
 NB, do not attach a TTY (ie, do not use docker's `-t` switch) if you are piping input
 ```
-$ docker run --rm -i dcgen generate -e FOO=foo -e BAR=bar < template.yml > generated.yml
+$ docker run --rm -i brettmc/docker-compose-generator generate -e FOO=foo -e BAR=bar < template.yml > generated.yml
 ```
 or
 ```
-$ cat template.yml | docker run --rm -i dcgen generate -e FOO=foo -e BAR=bar > generated.yml
+$ cat template.yml | docker run --rm -i brettmc/docker-compose-generator generate -e FOO=foo -e BAR=bar > generated.yml
 ```
