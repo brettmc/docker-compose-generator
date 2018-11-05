@@ -18,6 +18,12 @@ Accepts variables from INI-style environment files, command switches, or the cur
 Exclude keys from final output (eg if you use a labels-based router such as [traefik](https://traefik.io) in some environments, and
 rely on docker networking to expose ports in others, you can define both, and remove the one you don't need for a given configuration.
 
+## Path-based key-removal
+Keys can be removed based on their path:
+* ```my-service.ports```
+* ```^services.my-service.ports```
+`^` can be used to signify a top-level key.
+
 # Usage
 Example template.yml
 ```
