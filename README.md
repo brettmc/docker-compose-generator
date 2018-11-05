@@ -20,8 +20,9 @@ rely on docker networking to expose ports in others, you can define both, and re
 
 ## Path-based key-removal
 Keys can be removed based on their path:
-* ```my-service.ports```
-* ```^services.my-service.ports```
+* ```my-service.ports``` - any matching key
+* ```^services.my-service.ports``` - must match from top-level
+
 `^` can be used to signify a top-level key.
 
 # Usage
