@@ -1,6 +1,6 @@
 FROM php:7.2-cli-alpine
 WORKDIR /srv/app
-RUN apk add unzip git
+RUN apk add unzip
 ENTRYPOINT ["bin/console.php"]
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin --filename=composer
 COPY ./composer.* /srv/app/
