@@ -25,6 +25,7 @@ class GenerateCommand extends Command
                 new InputOption('env', 'e', InputOption::VALUE_IS_ARRAY | InputOption::VALUE_OPTIONAL, 'env setting (FOO=bar)'),
                 new InputOption('ini', null, InputOption::VALUE_IS_ARRAY | InputOption::VALUE_OPTIONAL, 'ini file containing settings'),
                 new InputOption('exclude', null, InputOption::VALUE_IS_ARRAY | InputOption::VALUE_OPTIONAL, 'key to be excluded from output'),
+                new InputOption('fs', null, InputArgument::OPTIONAL, 'field separator (default: .) - change if your keys contain the default', '.'),
             ]);
     }
 
@@ -45,11 +46,12 @@ class GenerateCommand extends Command
             $loader = new EnvironmentLoader($iniFiles);
             $env += $loader->load();
         }
+        $fs = $input->getOption('fs');
         $templateFile = $input->getArgument('template');
         $templateLoader = new TemplateLoader($templateFile);
         $template = $templateLoader->load($input);
         $remover = new ElementRemover();
-        $remover->remove($template, $excluded);
+        $remover->remove($template, $excluded, $fs);
         $yml = Yaml::dump($template, 10, 2);
         $misses = [];
         $substitutor = new EnvironmentSubstitutor();

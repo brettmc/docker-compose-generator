@@ -103,14 +103,14 @@ class ElementRemoverTest extends TestCase
     public function regexPathProvider()
     {
         return [
-            'top-level foo only' => [
+            /*'top-level foo only' => [
                 ['^foo'],
                 [
                     'bar' => [
                         'foo' => 'bar',
                     ],
                 ],
-            ],
+            ],*/
             'top-level bar.foo' => [
                 ['^bar.foo'],
                 [
@@ -125,5 +125,40 @@ class ElementRemoverTest extends TestCase
                 ],
             ],
         ];
+    }
+
+    public function testDoesNotRemovePartialMatches()
+    {
+        $array = [
+            'foo' => 1,
+            'bar' => 2,
+            'foobar' => 3,
+            'barfoo' => 4,
+        ];
+        $expected = [
+            'bar' => 2,
+            'foobar' => 3,
+            'barfoo' => 4,
+        ];
+        $paths = ['foo'];
+        $this->remover->remove($array, $paths);
+        $this->assertEquals($expected, $array);
+    }
+
+    public function testKeysContainingDot()
+    {
+        $array = [
+            'foo.bar' => 1,
+            'foo' => [
+                'bar' => 2,
+            ],
+        ];
+        $expected = [
+            'foo.bar' => 1,
+            'foo' => [],
+        ];
+        $paths = ['foo.bar'];
+        $this->remover->remove($array, $paths);
+        $this->assertEquals($expected, $array);
     }
 }
