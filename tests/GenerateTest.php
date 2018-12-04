@@ -38,7 +38,7 @@ class GenerateTest extends TestCase
     /**
      * @dataProvider excludeProvider
      */
-    public function testExclude(array $exclude, string $file)
+    public function testExclude(array $exclude, string $file, string $fs = '.')
     {
         $this->commandTester->execute([
             'template' => __DIR__.'/input/template.yml',
@@ -47,7 +47,8 @@ class GenerateTest extends TestCase
                 'BAR=bar',
                 'BAZ=baz',
             ],
-            '--exclude' => $exclude
+            '--exclude' => $exclude,
+            '--fs' => $fs,
         ]);
         $output = $this->commandTester->getDisplay();
         $expected = file_get_contents(__DIR__.'/output/'.$file);
@@ -64,6 +65,16 @@ class GenerateTest extends TestCase
             'exclude labels' => [
                 ['labels'],
                 'output-sans-labels.yml',
+            ],
+            'exclude my-service:labels' => [
+                ['my-service:labels'],
+                'output-sans-labels.yml',
+                ':',
+            ],
+            'exclude ^my-service:labels' => [
+                ['^services:my-service:labels'],
+                'output-sans-labels.yml',
+                ':',
             ],
         ];
     }

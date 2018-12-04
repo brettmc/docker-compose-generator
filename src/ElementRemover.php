@@ -3,33 +3,46 @@ namespace dcgen;
 
 class ElementRemover
 {
-    public function remove(array &$source, array $excluded): void
-    {
-        $this->internalRemove($source, $excluded);
-    }
-
-    private function internalRemove(array &$source, array $excluded, string $path = '')
+    public function remove(array &$source, array $excluded, string $fs = '.'): void
     {
         if (empty($excluded)) {
             return;
         }
+        $new = [];
+        //split excluded
+        foreach ($excluded as $string) {
+            $key = $string;
+            $fromStart = false;
+            if (substr($string, 0, 1) === '^') {
+                $string = substr($string, 1);
+                $fromStart = true;
+            }
+            $new[$key] = [
+                'path' => explode($fs, $string),
+                'fromStart' => $fromStart,
+            ];
+        }
+        $this->internalRemove($source, $new);
+    }
+
+    private function internalRemove(array &$source, array $excluded, array $path = [])
+    {
         foreach (array_keys($source) as $key) {
-            $test = $path ? sprintf('%s.%s', $path, $key) : $key;
-            if (is_string($key) && in_array($key, $excluded) === true || $this->regexContains($test, $excluded)) {
+            $newPath = array_merge($path, [$key]);
+            if ($this->matches($newPath, $excluded)) {
                 unset($source[$key]);
             } else {
                 if (is_array($source[$key])) {
-                    $newPath = $path ? sprintf('%s.%s', $path, $key) : $key;
                     $this->internalRemove($source[$key], $excluded, $newPath);
                 }
             }
         }
     }
 
-    private function regexContains(string $path, array $tests): bool
+    private function matches(array $path, array $excluded): bool
     {
-        foreach ($tests as $test) {
-            if (preg_match(sprintf('/%s/', $test), $path) === 1) {
+        foreach ($excluded as $exclude) {
+            if (ArrayPathMatcher::matches($path, $exclude['path'], $exclude['fromStart'])) {
                 return true;
             }
         }
