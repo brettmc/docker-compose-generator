@@ -36,16 +36,17 @@ class GenerateCommand extends Command
             $input->setStream(STDIN);
         }
         $excluded = $input->getOption('exclude');
-        $env = [];
+        $settings = [];
         foreach ($input->getOption('env') as $pair) {
             list($k, $v) = explode('=', $pair);
-            $env[$k] = $v;
+            $settings[$k] = $v;
         }
         $iniFiles = $input->getOption('ini');
+        $loader = new EnvironmentLoader();
         if ($iniFiles) {
-            $loader = new EnvironmentLoader($iniFiles);
-            $env += $loader->load();
+            $loader->load($iniFiles);
         }
+        $loader->add($settings);
         $fs = $input->getOption('fs');
         $templateFile = $input->getArgument('template');
         $templateLoader = new TemplateLoader($templateFile);
@@ -55,7 +56,7 @@ class GenerateCommand extends Command
         $yml = Yaml::dump($template, 10, 2);
         $misses = [];
         $substitutor = new EnvironmentSubstitutor();
-        $yml = $substitutor->substitute($yml, $env, $misses);
+        $yml = $substitutor->substitute($yml, $loader->get(), $misses);
         $output->writeln($yml);
         if (count($misses) > 0) {
             $error = $output instanceof ConsoleOutput ? $output->getErrorOutput() : $output;

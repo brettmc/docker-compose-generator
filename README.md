@@ -12,7 +12,10 @@ which change per-environment, this tool can help.
 Perform variable substitution across the template, based on environment variables.
 
 ## Define variables in numerous ways
-Accepts variables from INI-style environment files, command switches, or the current environment
+Accepts variables from INI-style environment files, or command switches.
+
+* `.ini` files (eg `--ini global.ini --ini local.ini`) are processed in the order they are provided, with duplicate keys overriding earlier
+* env vars (`-e FOO=foo`) are applied after `.ini`
 
 ## Remove keys you do not need
 Exclude keys from final output (eg if you use a labels-based router such as [traefik](https://traefik.io) in some environments, and
