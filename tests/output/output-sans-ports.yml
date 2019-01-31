@@ -13,4 +13,5 @@ services:
     environment:
       BAR: 'bar'
       BAZ: 'baz'
+      BARBAZ: 'bar and baz'
 

@@ -16,7 +16,7 @@ class EnvironmentSubstitutor
     public function substitute(string $source, array $env, array &$misses): string
     {
         $missed = [];
-        $output = preg_replace_callback('/{{(.+)}}/', function ($matches) use ($env, &$missed) {
+        $output = preg_replace_callback('/{{(.+?)}}/', function ($matches) use ($env, &$missed) {
             $key = $matches[1];
             if (array_key_exists($key, $env)) {
                 return $env[$key];
