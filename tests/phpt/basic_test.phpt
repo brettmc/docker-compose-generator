@@ -22,4 +22,5 @@ services:
     environment:
       BAR: '{{BAR}}'
       BAZ: '{{BAZ}}'
+      BARBAZ: '{{BAR}} and {{BAZ}}'
 
