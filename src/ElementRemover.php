@@ -27,6 +27,7 @@ class ElementRemover
 
     private function internalRemove(array &$source, array $excluded, array $path = [])
     {
+        $reindex = false;
         foreach ($source as $key => $value) {
             $newPath = array_merge($path, [$key]);
             if ($this->matches($newPath, $excluded)) {
@@ -37,12 +38,16 @@ class ElementRemover
                 $valuePath = is_int($key) ? array_merge($path, [$value]) : array_merge($newPath, [$value]);
                 if ($this->matches($valuePath, $excluded)) {
                     unset($source[$key]);
+                    is_int($key) && $reindex = $reindex || is_int($key);
                 }
                 continue;
             }
             if (is_array($source[$key])) {
                 $this->internalRemove($source[$key], $excluded, $newPath);
             }
+        }
+        if ($reindex) {
+            $source = array_values($source);
         }
     }
 

@@ -21,8 +21,6 @@ class ArrayPathMatcher
                 return false;
             }
             for ($i=0; $i < count($haystack); $i++) {
-                //$inArray = array_key_exists($i, $needle);
-                //$matches = fnmatch($needle[$i], $haystack[$i]);
                 if (!array_key_exists($i, $needle) || !fnmatch($needle[$i], $haystack[$i])) {
                     return false;
                 }

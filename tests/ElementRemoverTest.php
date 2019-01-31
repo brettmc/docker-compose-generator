@@ -276,4 +276,27 @@ class ElementRemoverTest extends TestCase
         $this->remover->remove($array, $paths);
         $this->assertEquals($expected, $array);
     }
+
+    public function testRemovingAnArrayElementReordersTheArray()
+    {
+        $array = [
+            'foo' => [
+                'one',
+                'two',
+                'three',
+                'four',
+                'five',
+            ],
+        ];
+        $expected = [
+            'foo' => [
+                'one',
+                'three',
+                'five',
+            ],
+        ];
+        $paths = ['two', 'four'];
+        $this->remover->remove($array, $paths);
+        $this->assertEquals($expected, $array);
+    }
 }
