@@ -10,7 +10,7 @@ class ArrayPathMatcher
      *
      * @param array $haystack Path to match against
      * @param array $needle Test
-     * @param bool $fromStart Does the path need to match from start-to-finish, just just at end>
+     * @param bool $fromStart Does the path need to match from start-to-finish, just just at end?
      * @return bool
      */
     public static function matches(array $haystack, array $needle, bool $fromStart = false): bool
@@ -21,7 +21,7 @@ class ArrayPathMatcher
                 return false;
             }
             for ($i=0; $i < count($haystack); $i++) {
-                if (!array_key_exists($i, $needle) || $needle[$i] !== $haystack[$i]) {
+                if (!array_key_exists($i, $needle) || !fnmatch($needle[$i], $haystack[$i])) {
                     return false;
                 }
             }
@@ -30,7 +30,7 @@ class ArrayPathMatcher
             //match from end
             $rev = array_reverse($haystack);
             foreach (array_reverse($needle) as $i => $val) {
-                if ($val !== $rev[$i]) {
+                if (!fnmatch($val, $rev[$i])) {
                     return false;
                 }
             }

@@ -32,6 +32,121 @@ class ElementRemoverTest extends TestCase
     }
 
     /**
+     *
+     * @dataProvider partialMatchProvider
+     */
+    public function testRemoveOnPartialMatch(array $array, array $exclude, array $expected)
+    {
+        $this->remover->remove($array, $exclude);
+        $this->assertEquals($expected, $array);
+    }
+    public function partialMatchProvider()
+    {
+        return [
+            'remove foobar*' => [
+                [
+                    'foo' => [
+                        'labels' => [
+                            'foobar.one=two',
+                            'foobar.two=three',
+                        ],
+                    ],
+                ],
+                ['labels.foobar*'],
+                [
+                    'foo' => [
+                        'labels' => [],
+                    ],
+                ],
+            ],
+            'remove services.foo*' => [
+                [
+                    'services' => [
+                        'foo-one' => [
+                            'foo' => 'bar',
+                        ],
+                        'foo-two' => [
+                            'foo' => 'bar',
+                        ],
+                    ],
+                ],
+                ['services.foo*'],
+                [
+                    'services' => [],
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider leafRemoveProvider
+     */
+    public function testRemoveLeafElements(array $array, array $exclude, array $expected)
+    {
+        $this->remover->remove($array, $exclude);
+        $this->assertEquals($expected, $array);
+    }
+
+    public function leafRemoveProvider()
+    {
+        return [
+            'remove all baz' => [
+                [
+                    'foo' => [
+                        'bar' => 'baz',
+                        'bat' => [
+                            'foo',
+                            'baz',
+                        ],
+                    ],
+                ],
+                ['baz'],
+                [
+                    'foo' => [
+                        'bat' => [
+                            'foo'
+                        ],
+                    ],
+                ],
+            ],
+            'remove only top-level bat.baz' => [
+                [
+                    'bat' => [
+                        'foo',
+                        'baz',
+                    ],
+                ],
+                ['^bat.baz'],
+                [
+                    'bat' => [
+                        'foo'
+                    ],
+                ],
+            ],
+            'remove only bat.baz' => [
+                [
+                    'foo' => [
+                        'bar' => 'baz',
+                        'bat' => [
+                            'foo',
+                            'baz',
+                        ],
+                    ],
+                ],
+                ['bat.baz'],
+                [
+                    'foo' => [
+                        'bar' => 'baz',
+                        'bat' => [
+                            'foo'
+                        ],
+                    ],
+                ],
+            ],
+        ];
+    }
+
+    /**
      * @dataProvider pathProvider
      */
     public function testPathRemove(array $paths, array $expected)
@@ -103,14 +218,14 @@ class ElementRemoverTest extends TestCase
     public function regexPathProvider()
     {
         return [
-            /*'top-level foo only' => [
+            'top-level foo only' => [
                 ['^foo'],
                 [
                     'bar' => [
                         'foo' => 'bar',
                     ],
                 ],
-            ],*/
+            ],
             'top-level bar.foo' => [
                 ['^bar.foo'],
                 [
@@ -158,6 +273,29 @@ class ElementRemoverTest extends TestCase
             'foo' => [],
         ];
         $paths = ['foo.bar'];
+        $this->remover->remove($array, $paths);
+        $this->assertEquals($expected, $array);
+    }
+
+    public function testRemovingAnArrayElementReordersTheArray()
+    {
+        $array = [
+            'foo' => [
+                'one',
+                'two',
+                'three',
+                'four',
+                'five',
+            ],
+        ];
+        $expected = [
+            'foo' => [
+                'one',
+                'three',
+                'five',
+            ],
+        ];
+        $paths = ['two', 'four'];
         $this->remover->remove($array, $paths);
         $this->assertEquals($expected, $array);
     }

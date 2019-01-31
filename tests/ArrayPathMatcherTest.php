@@ -71,6 +71,26 @@ class ArrayPathMatcherTest extends TestCase
                 ['foo'],
                 true,
             ],
+            [
+                $short,
+                ['f*'],
+                true,
+            ],
+            [
+                $long,
+                ['ba[zs]', 'bat'],
+                true,
+            ],
+            [
+                $long,
+                ['ba[zZ]', 'ba[tT]'],
+                true,
+            ],
+            [
+                $long,
+                ['ba[zZ]', 'ba[abc]'],
+                false,
+            ],
         ];
     }
 
@@ -102,6 +122,14 @@ class ArrayPathMatcherTest extends TestCase
             ],
             [
                 ['foo', 'bar', 'baz', 'bat'],
+                true,
+            ],
+            [
+                ['foo', 'bar', 'baz', 'ba[rzt]'],
+                true,
+            ],
+            [
+                ['foo', 'bar', 'baz', 'ba*'],
                 true,
             ],
         ];
