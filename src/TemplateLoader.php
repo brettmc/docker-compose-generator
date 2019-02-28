@@ -1,48 +1,55 @@
 <?php
 namespace dcgen;
 
-use Symfony\Component\Console\Input\Input;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Yaml\Yaml;
+use Zend\Stdlib\ArrayUtils;
 
 class TemplateLoader
 {
-    private $filename;
-
-    public function __construct(string $filename = null)
+    /**
+     * Load and merge one or more YAML templates from stream input and/or files.
+     * Stream input takes precedence if there are both.
+     *
+     * @param InputInterface $input
+     * @param array $filenames
+     * @return array
+     * @throws \InvalidArgumentException
+     */
+    public function load(InputInterface $input, array $filenames): array
     {
-        if ($filename && !file_exists($filename)) {
-            throw new \InvalidArgumentException('File not found: '.$filename);
+        $template = $this->yamlFromStream($input);
+        if (empty($template) && empty($filenames)) {
+            throw new \InvalidArgumentException('No input provided');
         }
-        $this->filename = $filename;
-    }
-
-    public function load(InputInterface $input): array
-    {
-        $content = $this->readFileOrStdin($input, $this->filename);
-        return (array)Yaml::parse($content);
+        foreach ($filenames as $filename) {
+            if (!file_exists($filename)) {
+                throw new \InvalidArgumentException('File does not exist: '.$filename);
+            }
+            $content = (array)Yaml::parse(file_get_contents($filename));
+            $template = ArrayUtils::merge($template, $content);
+        }
+        return $template;
     }
 
     /**
-     * If $file is provided, read its contents. Otherwise, read from input stream
+     * Read and parse YAML document from input stream
      *
-     * @param string $file
-     * @return string
+     * @param InputInterface $input
+     * @return array
      * @throws \RuntimeException
      */
-    private function readFileOrStdin(Input $input, string $file = null): string
+    private function yamlFromStream(InputInterface $input): array
     {
         $stream = $input->getStream() ?: STDIN;
-        if ($file) {
-            $contents = file_get_contents($file);
-        } elseif (is_resource($stream) && 0 === ftell($stream)) {
+        $arr = [];
+        if (is_resource($stream) && 0 === ftell($stream)) {
             $contents = '';
             while (!feof($stream)) {
                 $contents .= fread($stream, 1024);
             }
-        } else {
-            throw new \RuntimeException('Template not found in file or STDIN');
+            $arr = (array)Yaml::parse($contents);
         }
-        return $contents;
+        return $arr;
     }
 }

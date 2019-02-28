@@ -1,17 +1,20 @@
 {
     "scripts": {
+        "analyse": "phpstan analyse src --level=1 -n",
         "test": "phpunit",
         "check": "php-cs-fixer fix --dry-run",
         "fix": "php-cs-fixer fix"
     },
     "require": {
         "symfony/yaml": "^4.1",
-        "symfony/console": "^4.2"
+        "symfony/console": "^4.2",
+        "zendframework/zend-stdlib": "^3"
     },
     "require-dev": {
+        "friendsofphp/php-cs-fixer": "^2",
         "phpunit/phpunit": "^7",
         "php-coveralls/php-coveralls": "^2",
-        "friendsofphp/php-cs-fixer": "^2"
+        "phpstan/phpstan": "*"
     },
     "autoload": {
         "psr-4": {

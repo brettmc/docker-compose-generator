@@ -1,0 +1,6 @@
+services:
+  my-other-service:
+    ports:
+      - "80:80"
+    environment:
+      FOO: "{{FOO}}"

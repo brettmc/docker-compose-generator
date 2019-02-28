@@ -3,8 +3,16 @@ namespace dcgen;
 
 class EnvironmentLoader
 {
+    /**
+     * @var array
+     */
     private $settings = [];
 
+    /**
+     * @param array $iniFiles
+     * @return void
+     * @throws \RuntimeException
+     */
     public function load(array $iniFiles): void
     {
         foreach ($iniFiles as $filename) {

@@ -21,7 +21,7 @@ class GenerateCommand extends Command
             ->setName('generate')
             ->setDescription('generate docker-compose config from YAML')
             ->setDefinition([
-                new InputArgument('template', InputArgument::OPTIONAL, 'template file'),
+                new InputOption('input', null, InputOption::VALUE_IS_ARRAY | InputOption::VALUE_OPTIONAL, 'YAML input files(s)'),
                 new InputOption('env', 'e', InputOption::VALUE_IS_ARRAY | InputOption::VALUE_OPTIONAL, 'env setting (FOO=bar)'),
                 new InputOption('ini', null, InputOption::VALUE_IS_ARRAY | InputOption::VALUE_OPTIONAL, 'ini file containing settings'),
                 new InputOption('exclude', null, InputOption::VALUE_IS_ARRAY | InputOption::VALUE_OPTIONAL, 'key to be excluded from output'),
@@ -31,26 +31,26 @@ class GenerateCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        //todo: can symfony/console do this
+        //todo: can symfony/console do this?
         if ($input->getStream() === null) {
             $input->setStream(STDIN);
         }
-        $excluded = $input->getOption('exclude');
+        $excluded = (array)$input->getOption('exclude');
         $settings = [];
-        foreach ($input->getOption('env') as $pair) {
+        foreach ((array)$input->getOption('env') as $pair) {
             list($k, $v) = explode('=', $pair);
             $settings[$k] = $v;
         }
-        $iniFiles = $input->getOption('ini');
+        $iniFiles = (array)$input->getOption('ini');
         $loader = new EnvironmentLoader();
         if ($iniFiles) {
             $loader->load($iniFiles);
         }
         $loader->add($settings);
         $fs = $input->getOption('fs');
-        $templateFile = $input->getArgument('template');
-        $templateLoader = new TemplateLoader($templateFile);
-        $template = $templateLoader->load($input);
+
+        $templateLoader = new TemplateLoader();
+        $template = $templateLoader->load($input, (array)$input->getOption('input'));
         $remover = new ElementRemover();
         $remover->remove($template, $excluded, $fs);
         $yml = Yaml::dump($template, 10, 2);

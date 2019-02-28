@@ -28,6 +28,6 @@ class EnvironmentSubstitutor
             return getenv($key) ?: sprintf('{{%s}}', $key);
         }, $source);
         $misses = array_keys(array_flip($missed));
-        return $output;
+        return $output ?? '';
     }
 }

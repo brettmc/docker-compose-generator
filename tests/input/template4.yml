@@ -1,0 +1,6 @@
+services:
+  three-service:
+    image: "bar:latest"
+    environment:
+      BAR: "{{BAR}}"
+      BAZ: "{{BAZ}}"
