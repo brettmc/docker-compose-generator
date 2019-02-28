@@ -1,0 +1,5 @@
+services:
+  three-service:
+    image: "foo:latest"
+    environment:
+      FOO: "{{FOO}}"

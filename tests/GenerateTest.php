@@ -8,11 +8,22 @@ use Symfony\Component\Console\Tester\CommandTester;
 class GenerateTest extends TestCase
 {
     private $commandTester;
+    private $arguments;
 
     public function setup()
     {
         $command = new GenerateCommand();
         $this->commandTester = new CommandTester($command);
+        $this->arguments = [
+            '--input' => [
+                __DIR__.'/input/template.yml',
+            ],
+            '--env' => [
+                'FOO=foo',
+                'BAR=bar',
+                'BAZ=baz',
+            ],
+        ];
     }
 
     public function tearDown()
@@ -22,14 +33,7 @@ class GenerateTest extends TestCase
 
     public function testBasicFunctionality()
     {
-        $this->commandTester->execute([
-            'template' => __DIR__.'/input/template.yml',
-            '--env' => [
-                'FOO=foo',
-                'BAR=bar',
-                'BAZ=baz',
-            ],
-        ]);
+        $this->commandTester->execute($this->arguments);
         $output = $this->commandTester->getDisplay();
         $expected = file_get_contents(__DIR__.'/output/output.yml');
         $this->assertEquals($expected, $output);
@@ -40,13 +44,7 @@ class GenerateTest extends TestCase
      */
     public function testExclude(array $exclude, string $file, string $fs = '.')
     {
-        $this->commandTester->execute([
-            'template' => __DIR__.'/input/template.yml',
-            '--env' => [
-                'FOO=foo',
-                'BAR=bar',
-                'BAZ=baz',
-            ],
+        $this->commandTester->execute($this->arguments + [
             '--exclude' => $exclude,
             '--fs' => $fs,
         ]);
@@ -82,7 +80,9 @@ class GenerateTest extends TestCase
     public function testUsesSettingsFromIniFiles()
     {
         $this->commandTester->execute([
-            'template' => __DIR__.'/input/template.yml',
+            '--input' => [
+                __DIR__.'/input/template.yml',
+            ],
             '--ini' => [
                 __DIR__.'/input/foo.ini',
                 __DIR__.'/input/bar.ini',
@@ -100,7 +100,9 @@ class GenerateTest extends TestCase
     {
         putenv('BAR=bar');
         $this->commandTester->execute([
-            'template' => __DIR__.'/input/template.yml',
+            '--input' => [
+                __DIR__.'/input/template.yml',
+            ],
             '--env' => [
                 'FOO=foo',
                 'BAZ=baz',
@@ -117,12 +119,14 @@ class GenerateTest extends TestCase
     public function testThrowsExceptionIfInputFileNotFound()
     {
         $this->commandTester->execute([
-            'template' => '/file/that/does/not/exist',
+            '--input' => [
+                '/file/that/does/not/exist',
+            ],
         ]);
     }
 
     /**
-     * @expectedException RuntimeException
+     * @expectedException InvalidArgumentException
      */
     public function testThrowsExceptionIfNoInputProvided()
     {
@@ -135,7 +139,9 @@ class GenerateTest extends TestCase
     public function testThrowsExceptionIfIniFileNotFound()
     {
         $this->commandTester->execute([
-            'template' => __DIR__.'/input/template.yml',
+            '--input' => [
+                __DIR__.'/input/template.yml',
+            ],
             '--ini' => [
                 __DIR__.'/input/env.ini',
                 '/file/that/does/not/exist',
@@ -159,11 +165,30 @@ class GenerateTest extends TestCase
         $this->assertEquals($expected, $output);
     }
 
+    public function testReadsTemplateFromInputOption()
+    {
+        $this->commandTester->execute([
+            '--input' => [
+                __DIR__.'/input/template.yml',
+            ],
+            '--env' => [
+                'FOO=foo',
+                'BAR=bar',
+                'BAZ=baz',
+            ],
+        ]);
+        $output = $this->commandTester->getDisplay();
+        $expected = file_get_contents(__DIR__.'/output/output.yml');
+        $this->assertEquals($expected, $output);
+    }
+
     public function testMissesAreWrittenToStdout()
     {
         $this->commandTester->execute(
             [
-                'template' => __DIR__.'/input/template.yml',
+                '--input' => [
+                    __DIR__.'/input/template.yml',
+                ],
                 '--env' => [
                     'FOO=foo',
                 ],

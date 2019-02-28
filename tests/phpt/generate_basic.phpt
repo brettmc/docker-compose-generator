@@ -1,8 +1,8 @@
 --TEST--
-generate test, remove all label values containing *port*
+generate test, should echo the unmodified input
 --FILE--
 <?php
-echo shell_exec('bin/console.php generate --exclude labels.*port* tests/input/template.yml 2>/dev/null');
+echo shell_exec('bin/console.php generate < tests/input/template.yml 2>/dev/null');
 ?>
 --EXPECT--
 version: '3.4'
@@ -17,6 +17,7 @@ services:
       - 'traefik.docker.network={{FOO}}'
       - traefik.enabled=true
       - 'traefik.frontend.rule=HOST my-service.{{BAR}}.example.com'
+      - traefik.port=80
       - traefik.protocol=http
     environment:
       BAR: '{{BAR}}'

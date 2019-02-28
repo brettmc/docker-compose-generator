@@ -8,6 +8,11 @@ A tool for populating a docker-compose file from a template, using mustache-like
 If you need to maintain multiple, slightly-different, [docker-compose](https://docs.docker.com/compose) configurations
 which change per-environment, this tool can help.
 
+## Merge multiple input templates
+Merge multiple `YAML` templates. For example, a "core.yml" template can be extended by having "custom.yml"
+add additional services. These will be merged together before applying later operations.
+If templates are provided from both `stdin` and via the `--input` option, `stdin` is processed first.
+
 ## Variable substitution
 Perform variable substitution across the template, based on environment variables.
 

@@ -25,4 +25,16 @@ class EnvironmentLoaderTest extends TestCase
         $expected['BAR'] = 'kangaroo';
         $this->assertEquals($expected, $loader->get());
     }
+
+    /**
+     * @expectedException RuntimeException
+     */
+    public function testThrowsExceptionOnNotFoundIniFile()
+    {
+        $filenames = [
+            __DIR__.'/input/does-not-exist.ini',
+        ];
+        $loader = new EnvironmentLoader();
+        $loader->load($filenames);
+    }
 }
