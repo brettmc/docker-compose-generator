@@ -8,7 +8,7 @@ class ElementRemoverTest extends TestCase
 {
     private $remover;
 
-    public function setup()
+    public function setup(): void
     {
         $this->remover = new ElementRemover();
     }

@@ -10,7 +10,7 @@ class GenerateTest extends TestCase
     private $commandTester;
     private $arguments;
 
-    public function setup()
+    public function setup(): void
     {
         $command = new GenerateCommand();
         $this->commandTester = new CommandTester($command);
@@ -26,7 +26,7 @@ class GenerateTest extends TestCase
         ];
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         putenv('BAR=');
     }
@@ -113,11 +113,9 @@ class GenerateTest extends TestCase
         $this->assertEquals($expected, $output);
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     */
     public function testThrowsExceptionIfInputFileNotFound()
     {
+        $this->expectException(\InvalidArgumentException::class);
         $this->commandTester->execute([
             '--input' => [
                 '/file/that/does/not/exist',
@@ -125,19 +123,15 @@ class GenerateTest extends TestCase
         ]);
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     */
     public function testThrowsExceptionIfNoInputProvided()
     {
+        $this->expectException(\InvalidArgumentException::class);
         $this->commandTester->execute([]);
     }
 
-    /**
-     * @expectedException RuntimeException
-     */
     public function testThrowsExceptionIfIniFileNotFound()
     {
+        $this->expectException(\RuntimeException::class);
         $this->commandTester->execute([
             '--input' => [
                 __DIR__.'/input/template.yml',
@@ -198,6 +192,6 @@ class GenerateTest extends TestCase
             ]
         );
         $output = $this->commandTester->getErrorOutput();
-        $this->assertContains('WARNING: 2 keys were not defined: BAR, BAZ', $output);
+        $this->assertStringContainsString('WARNING: 2 keys were not defined: BAR, BAZ', $output);
     }
 }

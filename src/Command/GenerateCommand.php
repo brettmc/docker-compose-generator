@@ -31,10 +31,6 @@ class GenerateCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        //todo: can symfony/console do this?
-        if ($input->getStream() === null) {
-            $input->setStream(STDIN);
-        }
         $excluded = (array)$input->getOption('exclude');
         $settings = [];
         foreach ((array)$input->getOption('env') as $pair) {
@@ -62,5 +58,6 @@ class GenerateCommand extends Command
             $error = $output instanceof ConsoleOutput ? $output->getErrorOutput() : $output;
             $error->writeLn(sprintf('WARNING: %d keys were not defined: %s', count($misses), implode(', ', $misses)));
         }
+        return 0;
     }
 }
