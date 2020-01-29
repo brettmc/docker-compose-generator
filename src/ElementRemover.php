@@ -38,7 +38,9 @@ class ElementRemover
                 $valuePath = is_int($key) ? array_merge($path, [$value]) : array_merge($newPath, [$value]);
                 if ($this->matches($valuePath, $excluded)) {
                     unset($source[$key]);
-                    is_int($key) && $reindex = $reindex || is_int($key);
+                    if (is_int($key)) {
+                        $reindex = true;
+                    }
                 }
                 continue;
             }

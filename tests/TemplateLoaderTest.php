@@ -10,7 +10,7 @@ class TemplateLoaderTest extends TestCase
     private $loader;
     private $input;
 
-    public function setup()
+    public function setup(): void
     {
         $this->input = $this->getMockBuilder(Input::class)->disableOriginalConstructor()->getMock();
         $this->loader = new TemplateLoader();
@@ -22,7 +22,7 @@ class TemplateLoaderTest extends TestCase
             __DIR__.'/input/template.yml',
         ];
         $output = $this->loader->load($this->input, $filenames);
-        $this->assertInternalType('array', $output);
+        $this->assertIsArray($output);
         $this->assertEquals(include(__DIR__.'/output/template.php'), $output);
     }
 
@@ -34,7 +34,7 @@ class TemplateLoaderTest extends TestCase
             __DIR__.'/input/template3.yml',
         ];
         $output = $this->loader->load($this->input, $filenames);
-        $this->assertInternalType('array', $output);
+        $this->assertIsArray($output);
         $this->assertEquals(include(__DIR__.'/output/templates-merged.php'), $output);
     }
 
@@ -46,7 +46,7 @@ class TemplateLoaderTest extends TestCase
             __DIR__.'/input/template4.yml',
         ];
         $output = $this->loader->load($this->input, $filenames);
-        $this->assertInternalType('array', $output);
+        $this->assertIsArray($output);
         $this->assertEquals(include(__DIR__.'/output/templates-34-merged.php'), $output);
     }
 
@@ -57,7 +57,7 @@ class TemplateLoaderTest extends TestCase
             __DIR__.'/input/template4.yml',
         ];
         $output = $this->loader->load($this->input, $filenames);
-        $this->assertInternalType('array', $output);
+        $this->assertIsArray($output);
         $this->assertEquals(include(__DIR__.'/output/templates-34-merged.php'), $output);
     }
 }

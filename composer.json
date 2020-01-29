@@ -1,18 +1,18 @@
 {
     "scripts": {
-        "analyse": "phpstan analyse src --level=1 -n",
+        "analyse": "phpstan analyse src --level=4 -n",
         "test": "phpunit",
         "check": "php-cs-fixer fix --dry-run",
         "fix": "php-cs-fixer fix"
     },
     "require": {
-        "symfony/yaml": "^4.1",
-        "symfony/console": "^4.2",
-        "zendframework/zend-stdlib": "^3"
+        "laminas/laminas-stdlib": "^3",
+        "symfony/yaml": "^5",
+        "symfony/console": "^5"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^2",
-        "phpunit/phpunit": "^7",
+        "phpunit/phpunit": "^8",
         "php-coveralls/php-coveralls": "^2",
         "phpstan/phpstan": "*"
     },

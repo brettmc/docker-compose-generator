@@ -1,9 +1,9 @@
 <?php
 namespace dcgen;
 
-use Symfony\Component\Console\Input\InputInterface;
+use Laminas\Stdlib\ArrayUtils;
+use Symfony\Component\Console\Input\StreamableInputInterface;
 use Symfony\Component\Yaml\Yaml;
-use Zend\Stdlib\ArrayUtils;
 
 class TemplateLoader
 {
@@ -11,12 +11,12 @@ class TemplateLoader
      * Load and merge one or more YAML templates from stream input and/or files.
      * Stream input takes precedence if there are both.
      *
-     * @param InputInterface $input
+     * @param StreamableInputInterface $input
      * @param array $filenames
      * @return array
      * @throws \InvalidArgumentException
      */
-    public function load(InputInterface $input, array $filenames): array
+    public function load(StreamableInputInterface $input, array $filenames): array
     {
         $template = $this->yamlFromStream($input);
         if (empty($template) && empty($filenames)) {
@@ -35,11 +35,11 @@ class TemplateLoader
     /**
      * Read and parse YAML document from input stream
      *
-     * @param InputInterface $input
+     * @param StreamableInputInterface $input
      * @return array
      * @throws \RuntimeException
      */
-    private function yamlFromStream(InputInterface $input): array
+    private function yamlFromStream(StreamableInputInterface $input): array
     {
         $stream = $input->getStream() ?: STDIN;
         $arr = [];
