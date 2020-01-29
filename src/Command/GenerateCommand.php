@@ -9,6 +9,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Input\StreamableInputInterface;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Yaml\Yaml;
@@ -29,8 +30,13 @@ class GenerateCommand extends Command
             ]);
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        //todo: can symfony/console do this?
+        if ($input instanceof StreamableInputInterface && $input->getStream() === null) {
+            //only seems to happen when piping stdin via docker
+            $input->setStream(STDIN); // @codeCoverageIgnore
+        }
         $excluded = (array)$input->getOption('exclude');
         $settings = [];
         foreach ((array)$input->getOption('env') as $pair) {

@@ -1,6 +1,6 @@
 {
     "scripts": {
-        "analyse": "phpstan analyse src --level=4 -n",
+        "analyse": "phpstan analyse src --level=5 -n",
         "test": "phpunit",
         "check": "php-cs-fixer fix --dry-run",
         "fix": "php-cs-fixer fix"

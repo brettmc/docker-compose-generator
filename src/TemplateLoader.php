@@ -2,6 +2,7 @@
 namespace dcgen;
 
 use Laminas\Stdlib\ArrayUtils;
+use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\StreamableInputInterface;
 use Symfony\Component\Yaml\Yaml;
 
@@ -11,14 +12,17 @@ class TemplateLoader
      * Load and merge one or more YAML templates from stream input and/or files.
      * Stream input takes precedence if there are both.
      *
-     * @param StreamableInputInterface $input
+     * @param InputInterface $input
      * @param array $filenames
      * @return array
      * @throws \InvalidArgumentException
      */
-    public function load(StreamableInputInterface $input, array $filenames): array
+    public function load(InputInterface $input, array $filenames): array
     {
-        $template = $this->yamlFromStream($input);
+        $template = [];
+        if ($input instanceof StreamableInputInterface) {
+            $template = $this->yamlFromStream($input);
+        }
         if (empty($template) && empty($filenames)) {
             throw new \InvalidArgumentException('No input provided');
         }
@@ -41,15 +45,14 @@ class TemplateLoader
      */
     private function yamlFromStream(StreamableInputInterface $input): array
     {
-        $stream = $input->getStream() ?: STDIN;
-        $arr = [];
-        if (is_resource($stream) && 0 === ftell($stream)) {
-            $contents = '';
-            while (!feof($stream)) {
-                $contents .= fread($stream, 1024);
-            }
-            $arr = (array)Yaml::parse($contents);
+        $stream = $input->getStream();
+        if (!$stream) {
+            return [];
         }
-        return $arr;
+        $contents = '';
+        while (!feof($stream)) {
+            $contents .= fgets($stream);
+        }
+        return (array)Yaml::parse($contents);
     }
 }
