@@ -34,7 +34,8 @@ class GenerateCommand extends Command
     {
         //todo: can symfony/console do this?
         if ($input instanceof StreamableInputInterface && $input->getStream() === null) {
-            $input->setStream(STDIN);
+            //only seems to happen when piping stdin via docker
+            $input->setStream(STDIN); // @codeCoverageIgnore
         }
         $excluded = (array)$input->getOption('exclude');
         $settings = [];
