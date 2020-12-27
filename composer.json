@@ -4,6 +4,7 @@
     "description": "Template-driven docker-compose file generation",
     "keywords": ["docker-compose", "docker", "template"],
     "homepage": "https://github.com/brettmc/docker-compose-generator",
+    "issues": "https://github.com/brettmc/docker-compose-generator/issues",
     "license": "MIT",
     "authors": [
         {
@@ -18,7 +19,7 @@
         "fix": "php-cs-fixer fix"
     },
     "require": {
-        "php": "7.4",
+        "php": ">=7.4",
         "laminas/laminas-stdlib": "^3",
         "symfony/yaml": "^5",
         "symfony/console": "^5"
