@@ -4,14 +4,6 @@ networks:
   back: 'foo-back'
 services:
   my-service:
-    ports:
-      - '80:80'
-    labels:
-      - 'traefik.docker.network=foo'
-      - traefik.enabled=true
-      - 'traefik.frontend.rule=HOST my-service.bar.example.com'
-      - traefik.port=80
-      - traefik.protocol=http
     environment:
       BAR: 'bar'
       BAZ: 'baz'

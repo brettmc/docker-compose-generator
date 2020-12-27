@@ -16,7 +16,7 @@ class GenerateTest extends TestCase
         $this->commandTester = new CommandTester($command);
         $this->arguments = [
             '--input' => [
-                __DIR__.'/input/template.yml',
+                __DIR__.'/input/main.yml',
             ],
             '--env' => [
                 'FOO=foo',
@@ -39,49 +39,11 @@ class GenerateTest extends TestCase
         $this->assertEquals($expected, $output);
     }
 
-    /**
-     * @dataProvider excludeProvider
-     */
-    public function testExclude(array $exclude, string $file, string $fs = '.')
-    {
-        $this->commandTester->execute($this->arguments + [
-            '--exclude' => $exclude,
-            '--fs' => $fs,
-        ]);
-        $output = $this->commandTester->getDisplay();
-        $expected = file_get_contents(__DIR__.'/output/'.$file);
-        $this->assertEquals($expected, $output);
-    }
-
-    public function excludeProvider()
-    {
-        return [
-            'exclude ports' => [
-                ['ports'],
-                'output-sans-ports.yml',
-            ],
-            'exclude labels' => [
-                ['labels'],
-                'output-sans-labels.yml',
-            ],
-            'exclude my-service:labels' => [
-                ['my-service:labels'],
-                'output-sans-labels.yml',
-                ':',
-            ],
-            'exclude ^my-service:labels' => [
-                ['^services:my-service:labels'],
-                'output-sans-labels.yml',
-                ':',
-            ],
-        ];
-    }
-
     public function testUsesSettingsFromIniFiles()
     {
         $this->commandTester->execute([
             '--input' => [
-                __DIR__.'/input/template.yml',
+                __DIR__.'/input/main.yml',
             ],
             '--ini' => [
                 __DIR__.'/input/foo.ini',
@@ -101,7 +63,7 @@ class GenerateTest extends TestCase
         putenv('BAR=bar');
         $this->commandTester->execute([
             '--input' => [
-                __DIR__.'/input/template.yml',
+                __DIR__.'/input/main.yml',
             ],
             '--env' => [
                 'FOO=foo',
@@ -134,7 +96,7 @@ class GenerateTest extends TestCase
         $this->expectException(\RuntimeException::class);
         $this->commandTester->execute([
             '--input' => [
-                __DIR__.'/input/template.yml',
+                __DIR__.'/input/main.yml',
             ],
             '--ini' => [
                 __DIR__.'/input/env.ini',
@@ -145,7 +107,7 @@ class GenerateTest extends TestCase
 
     public function testReadsTemplateFromStdin()
     {
-        $template = file_get_contents(__DIR__.'/input/template.yml');
+        $template = file_get_contents(__DIR__.'/input/main.yml');
         $this->commandTester->setInputs([$template]);
         $this->commandTester->execute([
             '--env' => [
@@ -163,7 +125,7 @@ class GenerateTest extends TestCase
     {
         $this->commandTester->execute([
             '--input' => [
-                __DIR__.'/input/template.yml',
+                __DIR__.'/input/main.yml',
             ],
             '--env' => [
                 'FOO=foo',
@@ -181,7 +143,7 @@ class GenerateTest extends TestCase
         $this->commandTester->execute(
             [
                 '--input' => [
-                    __DIR__.'/input/template.yml',
+                    __DIR__.'/input/main.yml',
                 ],
                 '--env' => [
                     'FOO=foo',
