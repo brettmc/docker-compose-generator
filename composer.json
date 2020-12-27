@@ -1,4 +1,16 @@
 {
+    "name": "brettmc/docker-compose-generator",
+    "type": "project",
+    "description": "Template-driven docker-compose file generation",
+    "keywords": ["docker-compose", "docker", "template"],
+    "homepage": "https://github.com/brettmc/docker-compose-generator",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Brett McBride",
+            "role": "Developer"
+        }
+    ],
     "scripts": {
         "analyse": "phpstan analyse src --level=5 -n",
         "test": "phpunit",
@@ -6,6 +18,7 @@
         "fix": "php-cs-fixer fix"
     },
     "require": {
+        "php": "7.4",
         "laminas/laminas-stdlib": "^3",
         "symfony/yaml": "^5",
         "symfony/console": "^5"
