@@ -1,5 +1,5 @@
 <?php
-//template*.yml merged
+//main*.yml + template2.yml + template3.yml merged
 return [
     'version' => '3.4',
     'networks' => [
@@ -10,6 +10,7 @@ return [
         'my-service' => [
             'ports' => [
                 '80:80',
+                '443:443',
             ],
             'labels' => [
                 'traefik.docker.network={{FOO}}',

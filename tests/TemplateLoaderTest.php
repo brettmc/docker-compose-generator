@@ -19,7 +19,7 @@ class TemplateLoaderTest extends TestCase
     public function testLoadsSingleInputFile()
     {
         $filenames = [
-            __DIR__.'/input/template.yml',
+            __DIR__.'/input/main.yml',
         ];
         $output = $this->loader->load($this->input, $filenames);
         $this->assertIsArray($output);
@@ -29,13 +29,15 @@ class TemplateLoaderTest extends TestCase
     public function testLoadsAndMergesMultipleInputFiles()
     {
         $filenames = [
-            __DIR__.'/input/template.yml',
+            __DIR__.'/input/main.yml',
+            __DIR__.'/input/main.labels.yml',
+            __DIR__.'/input/main.ports.yml',
             __DIR__.'/input/template2.yml',
             __DIR__.'/input/template3.yml',
         ];
         $output = $this->loader->load($this->input, $filenames);
         $this->assertIsArray($output);
-        $this->assertEquals(include(__DIR__.'/output/templates-merged.php'), $output);
+        $this->assertEquals(include(__DIR__.'/output/main-2-3.merged.php'), $output);
     }
 
     public function testFileInputOverridesStreamInput()
@@ -59,5 +61,16 @@ class TemplateLoaderTest extends TestCase
         $output = $this->loader->load($this->input, $filenames);
         $this->assertIsArray($output);
         $this->assertEquals(include(__DIR__.'/output/templates-34-merged.php'), $output);
+    }
+
+    public function XtestEmptyKeyDoesNotClobberExisting()
+    {
+        $filenames = [
+            __DIR__.'/input/template2.yml',
+            __DIR__.'/input/template5.yml',
+        ];
+        $output = $this->loader->load($this->input, $filenames);
+        $this->assertNotNull($output['services']['my-other-service']['ports']);
+        var_dump($output);
     }
 }
