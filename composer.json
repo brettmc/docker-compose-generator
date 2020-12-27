@@ -19,7 +19,7 @@
         "fix": "php-cs-fixer fix"
     },
     "require": {
-        "php": ">=7.4",
+        "php": ">=7.2",
         "laminas/laminas-stdlib": "^3",
         "symfony/yaml": "^5",
         "symfony/console": "^5"

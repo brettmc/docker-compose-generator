@@ -14,7 +14,7 @@ install:
 
 script:
   - composer check
-  - ./vendor/bin/phpunit --coverage-text --coverage-clover build/logs/clover.xml
+  - XDEBUG_MODE=coverage ./vendor/bin/phpunit --coverage-text --coverage-clover build/logs/clover.xml
 
 after_success:
   - travis_retry vendor/bin/php-coveralls
