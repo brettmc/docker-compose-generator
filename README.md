@@ -112,7 +112,7 @@ case ${CI_ENV} in
     BAR=something-else
     ;;
 esac
-bin/console.php generate -e HASH=${CI_COMMIT_HASH} -e BAR=${BAR} --ini ${CI_ENV}.ini --input main.yml --input ${CI_ENV}.yml > docker-compose.yml
+bin/dcgen.php generate -e HASH=${CI_COMMIT_HASH} -e BAR=${BAR} --ini ${CI_ENV}.ini --input main.yml --input ${CI_ENV}.yml > docker-compose.yml
 docker -H ${HOST} stack deploy --prune --with-registry-auth -c docker-compose.yml ${STACK}
 ```
 
