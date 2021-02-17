@@ -2,7 +2,7 @@
 generate test, should echo the unmodified input
 --FILE--
 <?php
-echo shell_exec('bin/console.php generate < tests/input/main.yml 2>/dev/null');
+echo shell_exec('bin/dcgen generate < tests/input/main.yml 2>/dev/null');
 ?>
 --EXPECT--
 version: '3.4'

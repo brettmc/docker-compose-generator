@@ -1,0 +1,23 @@
+#!/usr/bin/env php
+<?php
+
+use dcgen\Command\GenerateCommand;
+use Symfony\Component\Console\Application;
+
+//@see https://tomasvotruba.com/blog/2018/08/02/5-gotchas-of-the-bin-file-in-php-cli-applications/
+$possibleAutoloaders = [
+    'vendor/autoload.php', //local
+    '../autoload.php', //installed as package
+];
+foreach ($possibleAutoloaders as $file) {
+    if (file_exists($file)) {
+        require_once($file);
+        break;
+    }
+}
+
+$app = new Application();
+$app->setName('docker-compose-generator');
+$app->setDefaultCommand('generate');
+$app->add(new GenerateCommand());
+$app->run();

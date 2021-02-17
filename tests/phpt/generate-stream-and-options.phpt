@@ -2,7 +2,7 @@
 generate test, should accept input from stdin + multiple input files, stdin is the primary
 --FILE--
 <?php
-echo shell_exec('bin/console.php generate --input tests/input/main.labels.yml --input tests/input/main.ports.yml --input tests/input/template2.yml --input tests/input/template3.yml < tests/input/main.yml 2>/dev/null');
+echo shell_exec('bin/dcgen generate --input tests/input/main.labels.yml --input tests/input/main.ports.yml --input tests/input/template2.yml --input tests/input/template3.yml < tests/input/main.yml 2>/dev/null');
 ?>
 --EXPECT--
 version: '3.4'
