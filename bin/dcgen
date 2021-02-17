@@ -17,7 +17,7 @@ foreach ($possibleAutoloaders as $file) {
 }
 
 $app = new Application();
-$app->setName('docker-compose generator');
+$app->setName('docker-compose-generator');
 $app->setDefaultCommand('generate');
 $app->add(new GenerateCommand());
 $app->run();
