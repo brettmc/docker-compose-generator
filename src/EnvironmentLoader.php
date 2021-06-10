@@ -19,7 +19,7 @@ class EnvironmentLoader
             if (!file_exists($filename)) {
                 throw new \RuntimeException('File not found: '.$filename);
             }
-            $this->settings = array_merge($this->settings, parse_ini_file($filename));
+            $this->settings = array_merge($this->settings, parse_ini_file($filename, false, INI_SCANNER_RAW));
         }
     }
 
