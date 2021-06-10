@@ -35,4 +35,20 @@ class EnvironmentLoaderTest extends TestCase
         $loader = new EnvironmentLoader();
         $loader->load($filenames);
     }
+
+    public function testIniValuesAreNotParsed()
+    {
+        $filenames = [
+            __DIR__.'/input/bools.ini',
+        ];
+        $loader = new EnvironmentLoader();
+        $loader->load($filenames);
+        $expected = [
+            'T' => 'true',
+            'F' => 'false',
+            'ONE' => 1,
+            'ZERO' => 0,
+        ];
+        $this->assertEquals($expected, $loader->get());
+    }
 }

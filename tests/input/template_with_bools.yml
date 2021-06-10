@@ -1,0 +1,9 @@
+version: '3.4'
+services:
+  my-service:
+    environment:
+      T: "{{T}}"
+      T2: '{{T}}'
+      F: "{{F}}"
+      ONE: "{{ONE}}"
+      ZERO: '{{ZERO}}'
