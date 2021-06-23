@@ -35,7 +35,7 @@ class GenerateCommand extends Command
         }
         $settings = [];
         foreach ((array)$input->getOption('env') as $pair) {
-            list($k, $v) = explode('=', $pair);
+            list($k, $v) = explode('=', $pair, 2);
             $settings[$k] = $v;
         }
         $iniFiles = (array)$input->getOption('ini');
