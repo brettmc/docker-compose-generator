@@ -22,6 +22,7 @@ class GenerateCommand extends Command
             ->setDefinition([
                 new InputOption('input', null, InputOption::VALUE_IS_ARRAY | InputOption::VALUE_OPTIONAL, 'YAML input files(s)'),
                 new InputOption('env', 'e', InputOption::VALUE_IS_ARRAY | InputOption::VALUE_OPTIONAL, 'env setting (FOO=bar)'),
+                new InputOption('override', 'o', InputOption::VALUE_IS_ARRAY | InputOption::VALUE_OPTIONAL, 'conditional override env setting (FOO=<non-empty-value>)'),
                 new InputOption('ini', null, InputOption::VALUE_IS_ARRAY | InputOption::VALUE_OPTIONAL, 'ini file containing settings'),
             ]);
     }
@@ -37,6 +38,10 @@ class GenerateCommand extends Command
         foreach ((array)$input->getOption('env') as $pair) {
             list($k, $v) = explode('=', $pair, 2);
             $settings[$k] = $v;
+        }
+        foreach ((array)$input->getOption('override') as $pair) {
+            list($k, $v) = explode('=', $pair, 2);
+            $v && $settings[$k] = $v;
         }
         $iniFiles = (array)$input->getOption('ini');
         $loader = new EnvironmentLoader();
