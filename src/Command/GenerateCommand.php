@@ -39,6 +39,10 @@ class GenerateCommand extends Command
             list($k, $v) = explode('=', $pair, 2);
             $settings[$k] = $v;
         }
+        foreach ((array)$input->getOption('override') as $pair) {
+            list($k, $v) = explode('=', $pair, 2);
+            $v && $settings[$k] = $v;
+        }
         $iniFiles = (array)$input->getOption('ini');
         $loader = new EnvironmentLoader();
         if ($iniFiles) {
