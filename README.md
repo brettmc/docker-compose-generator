@@ -46,9 +46,10 @@ After merging all templates, perform variable substitution across the result, ba
 ## Define variables in numerous ways
 Accepts variables from INI-style environment files, or command switches, in the following order:
 
-* `.ini` files (eg `--ini global.ini --ini local.ini`) are processed in the order they are provided, with duplicate keys overriding earlier; tnen
-* environment variables; and finally
-* command-line variables (`-e FOO=foo`)
+* `.ini` files (eg `--ini global.ini --ini local.ini`) are processed in the order they are provided, with duplicate keys overriding earlier; then
+* environment variables; then
+* command-line variables (`-e FOO=foo`); and finally
+* nullable command-line variables (`-o FOO=` or `-o FOO=foo`) - _if an empty value is given, it is ignored and does not clobber an earlier setting_
 
 # Usage
 
